@@ -40,8 +40,7 @@ rawdata = rawdata.withColumn("uid", monotonically_increasing_id())
 def split_text(record):
     text  = record[0]
     uid   = record[1]
-    words = text.split()
-    return words
+    return text.split()
 
 udf_splittext = udf(split_text , ArrayType(StringType()))
 splittext = rawdata.withColumn("words", udf_splittext(struct([rawdata[x] for x in rawdata.columns])))
@@ -66,11 +65,7 @@ ldamodel.isDistributed()
 ldatopics = ldamodel.describeTopics()
 
 def map_termID_to_Word(termIndices):
-    words = []
-    for termID in termIndices:
-        words.append(vocab_broadcast.value[termID])
-
-    return words
+    return [vocab_broadcast.value[termID] for termID in termIndices]
 
 udf_map_termID_to_Word = udf(map_termID_to_Word , ArrayType(StringType()))
 ldatopics_mapped = ldatopics.withColumn("topic_desc", udf_map_termID_to_Word(ldatopics.termIndices))

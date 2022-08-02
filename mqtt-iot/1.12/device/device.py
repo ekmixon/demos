@@ -3,6 +3,7 @@
 MQTT generator
 """
 
+
 import random
 import time
 import uuid
@@ -19,7 +20,7 @@ parser.add_argument("-q", "--qos", dest="qos", default=0, help="MQTT QOS")
 args = parser.parse_args()
 
 uuid = str(uuid.uuid4())
-topic = "device/%s" % uuid
+topic = f"device/{uuid}"
 
 mqttc = mqtt.Client(uuid, False)
 mqttc.connect(args.broker_address, args.broker_port)
